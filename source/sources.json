@@ -1,0 +1,62 @@
+[
+  {
+    "id": "S1",
+    "title": "Spacing Effects in Learning: A Temporal Ridgeline of Optimal Retention",
+    "authors": "Nicholas J. Cepeda、Edward Vul、Doug Rohrer、John T. Wixted、Harold Pashler",
+    "year": 2008,
+    "journal": "Psychological Science, 19(11), 1095–1102",
+    "url": "https://digitalcommons.usf.edu/psy_facpub/1766/",
+    "doi": "10.1111/j.1467-9280.2008.02209.x",
+    "method": "1,354 位參與者學習冷知識，經不同長度的間隔後複習，再接受延後測驗。複習間隔最長約三個半月，複習到最後測驗的時間最長一年。見方法與結果，頁 1096–1098。",
+    "result": "測驗延遲固定時，拉長複習間隔會先提高、再降低最後測驗的表現。目標記得越久時，表現較佳的間隔通常也較長。",
+    "limit": "這是事實材料學習的結果。實際安排須考慮保留目標、材料與可用時間。研究未給出通用的複習天數。"
+  },
+  {
+    "id": "S2",
+    "title": "Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention",
+    "authors": "Henry L. Roediger III、Jeffrey D. Karpicke",
+    "year": 2006,
+    "journal": "Psychological Science, 17(3), 249–255",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+    "doi": "10.1111/j.1467-9280.2006.01693.x",
+    "method": "實驗一讓學生閱讀短文，再分別重讀或在無回饋的情況下自由回想。最後測驗間隔為 5 分鐘、2 天或 1 週。見實驗一與圖 1，頁 250–251。",
+    "result": "5 分鐘後重讀組記得較多。到 2 天與 1 週的延後測驗，先回想的組別記得較多。",
+    "limit": "這是短文自由回憶測驗的結果。解讀時需保留測驗延遲、材料類型與本次未給回饋的條件。"
+  },
+  {
+    "id": "S3",
+    "title": "The Critical Importance of Retrieval for Learning",
+    "authors": "Jeffrey D. Karpicke、Henry L. Roediger III",
+    "year": 2008,
+    "journal": "Science, 319(5865), 966–968",
+    "url": "https://doi.org/10.1126/science.1152408",
+    "doi": "10.1126/science.1152408",
+    "method": "學生練習 40 組斯瓦希里語與英語詞對。在個別詞對首次答對後，研究分別控制該詞對是否繼續出現在閱讀或測驗階段。最後於一週後測驗。見頁 966–967 與圖 2。",
+    "result": "首次答對後，讓該詞對繼續出現在測驗中能改善一週後的回想。單靠增加這些已答對詞對的重讀，在本實驗中未觀察到相同好處。",
+    "limit": "研究探討的是已經成功提取的外語詞對。它提供保留部分已會題目的依據。"
+  },
+  {
+    "id": "S4",
+    "title": "Feedback Enhances the Positive Effects and Reduces the Negative Effects of Multiple-Choice Testing",
+    "authors": "Andrew C. Butler、Henry L. Roediger III",
+    "year": 2008,
+    "journal": "Memory & Cognition, 36(3), 604–616",
+    "url": "https://link.springer.com/article/10.3758/MC.36.3.604",
+    "doi": "10.3758/MC.36.3.604",
+    "method": "72 位大學生閱讀文章後作答選擇題，比較答題後立即提供正解、整份初次測驗答完後才給回饋，以及無回饋。約一週後做提示回憶測驗。見頁 606–609。",
+    "result": "相較於無回饋，兩種回饋條件都提高延後測驗的正答，並減少重複答出先前誘答選項的情況。",
+    "limit": "研究針對選擇題後的回饋。此處的延遲回饋指初次測驗結束時提供。"
+  },
+  {
+    "id": "S5",
+    "title": "Spaced Retrieval: Absolute Spacing Enhances Learning Regardless of Relative Spacing",
+    "authors": "Jeffrey D. Karpicke、Althea Bauernschmidt",
+    "year": 2011,
+    "journal": "Journal of Experimental Psychology: Learning, Memory, and Cognition, 37(5), 1250–1257",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/21574747/",
+    "doi": "10.1037/a0023436",
+    "method": "96 位大學生學習外語詞對，成功回想後再提取三次。研究比較各次提取之間插入了多少其他試次，以及三段間隔的排列方式，於一週後測驗。見頁 1252–1255 與圖 2。",
+    "result": "實驗範圍內，間隔較長的練習優於無間隔練習。研究未發現等距、逐次拉長或逐次縮短本身具有優勢。",
+    "limit": "練習間隔是以插入的試次計算。跨日複習行程是教學示例，不能直接從這項研究換算。"
+  }
+]

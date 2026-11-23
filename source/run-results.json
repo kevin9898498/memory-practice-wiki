@@ -1,0 +1,246 @@
+{
+  "scope": [
+    {
+      "question": "這堂課給誰？",
+      "decision": "給第一次聽到這兩種方法的大學生。學完能區分兩個概念、實作一題並排出自己的複習計畫。"
+    },
+    {
+      "question": "先問 Wiki 哪些問題？",
+      "decision": "怎麼安排間隔？提取練習是什麼？答對後還要再練嗎？答完如何核對？怎麼把兩種方法合在一起？"
+    },
+    {
+      "question": "如何處理證據與示例？",
+      "decision": "納入五篇原始實驗，每篇保留方法、結果、限制。簡報用主張 ID 查回 Wiki，跨日計畫標示為教學示例。"
+    }
+  ],
+  "runs": [
+    {
+      "name": "測試 1｜改版前",
+      "phase": "輸出後檢查",
+      "status": "攔下 2 項",
+      "errors": [
+        "第 3 頁的提取練習寫成普遍優於重讀，須回查 C04 與 S2 的測驗條件。",
+        "第 5 頁的日程須標示教學示例，須回查 C08、S1 與 S5。"
+      ],
+      "detail": "刻意把兩個常見錯句放進測試稿。流程先在暫存區產生一份 HTML，檢查時才攔下。"
+    },
+    {
+      "name": "測試 2｜改版後",
+      "phase": "排版前檢查",
+      "status": "攔下 2 項",
+      "errors": [
+        "第 3 頁的提取練習寫成普遍優於重讀，須回查 C04 與 S2 的測驗條件。",
+        "第 5 頁的日程須標示教學示例，須回查 C08、S1 與 S5。"
+      ],
+      "detail": "以相同測試稿重跑，兩個問題都在大綱階段被攔下。這次未產生該測試稿的 HTML。"
+    },
+    {
+      "name": "正式稿",
+      "phase": "審完大綱再排版",
+      "status": "通過",
+      "errors": [],
+      "detail": "第 3 頁使用 C04 的短文測驗情境，第 5 頁引用 C08 並標作教學示例。引用、題目結構和範圍規則均通過。"
+    },
+    {
+      "name": "Edge 離線瀏覽驗收",
+      "phase": "實際開啟 HTML",
+      "status": "通過",
+      "errors": [],
+      "detail": "用 Edge 從檔案開啟輸出的簡報與 Wiki。七頁可用按鈕、方向鍵及目錄切換，兩道題的答對與答錯回饋正常，18 個引用均連到 Wiki 內正確的錨點。五張來源卡、搜尋與清除均正常。390 px 寬度逐頁檢查未出現水平溢出，瀏覽器沒有未捕捉例外。"
+    }
+  ],
+  "stats": {
+    "sources": 5,
+    "topics": 4,
+    "claims": 8,
+    "slides": 7,
+    "refs": 18
+  },
+  "reflection": [
+    {
+      "question": "哪個節點最容易出錯？",
+      "answer": "這次刻意測試的兩個問題，都發生在把研究改寫成教學大綱時。一個把特定測驗結果寫成通則，另一個把示例日期寫成最佳時程。一次回歸測試只能指出這次驗證的風險。"
+    },
+    {
+      "question": "檢查往前移到了哪裡？",
+      "answer": "從 HTML 初稿完成後，移到查回 Wiki 主張、組好簡報大綱之後。先核對材料、測驗延遲與示例標籤，再允許進入排版。"
+    },
+    {
+      "question": "有修改 graph 嗎？",
+      "answer": "有。增加大綱檢查到改寫的回邊。主張有依據但寫得過頭時，回到大綱修正該頁。查不到依據時，回到 Wiki 查詢，必要時補讀來源再整理。瀏覽器仍在輸出後檢查互動和連結。"
+    }
+  ],
+  "mapping": [
+    {
+      "slide": 1,
+      "title": "讀過的東西，怎麼留到下週？",
+      "claims": [
+        {
+          "id": "C01",
+          "href": "wiki.html#C01",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "id": "C03",
+          "href": "wiki.html#C03",
+          "sources": [
+            "S2"
+          ]
+        }
+      ]
+    },
+    {
+      "slide": 2,
+      "title": "先分清楚兩個決定",
+      "claims": [
+        {
+          "id": "C01",
+          "href": "wiki.html#C01",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "id": "C03",
+          "href": "wiki.html#C03",
+          "sources": [
+            "S2"
+          ]
+        }
+      ]
+    },
+    {
+      "slide": 3,
+      "title": "測驗時間一變，結果也會變",
+      "claims": [
+        {
+          "id": "C04",
+          "href": "wiki.html#C04",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "id": "C02",
+          "href": "wiki.html#C02",
+          "sources": [
+            "S1"
+          ]
+        }
+      ]
+    },
+    {
+      "slide": 4,
+      "title": "做一次提取，再看答案",
+      "claims": [
+        {
+          "id": "C01",
+          "href": "wiki.html#C01",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "id": "C03",
+          "href": "wiki.html#C03",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "id": "C06",
+          "href": "wiki.html#C06",
+          "sources": [
+            "S4"
+          ]
+        }
+      ]
+    },
+    {
+      "slide": 5,
+      "title": "把同一組題目分開練",
+      "claims": [
+        {
+          "id": "C08",
+          "href": "wiki.html#C08",
+          "sources": [
+            "S1",
+            "S3",
+            "S5",
+            "S4"
+          ]
+        },
+        {
+          "id": "C07",
+          "href": "wiki.html#C07",
+          "sources": [
+            "S5"
+          ]
+        }
+      ]
+    },
+    {
+      "slide": 6,
+      "title": "檢查自己會不會用",
+      "claims": [
+        {
+          "id": "C05",
+          "href": "wiki.html#C05",
+          "sources": [
+            "S3"
+          ]
+        },
+        {
+          "id": "C06",
+          "href": "wiki.html#C06",
+          "sources": [
+            "S4"
+          ]
+        },
+        {
+          "id": "C07",
+          "href": "wiki.html#C07",
+          "sources": [
+            "S5"
+          ]
+        }
+      ]
+    },
+    {
+      "slide": 7,
+      "title": "現在就排下一次複習",
+      "claims": [
+        {
+          "id": "C02",
+          "href": "wiki.html#C02",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "id": "C05",
+          "href": "wiki.html#C05",
+          "sources": [
+            "S3"
+          ]
+        },
+        {
+          "id": "C06",
+          "href": "wiki.html#C06",
+          "sources": [
+            "S4"
+          ]
+        },
+        {
+          "id": "C03",
+          "href": "wiki.html#C03",
+          "sources": [
+            "S2"
+          ]
+        }
+      ]
+    }
+  ]
+}

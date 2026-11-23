@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>記憶練習簿</title>
+  <style>
+    :root {
+      --ink: #182544;
+      --blue: #203b85;
+      --deep: #12234f;
+      --paper: #f3f6ff;
+      --yellow: #f9d560;
+      --line: #ccd6ef;
+      --muted: #485877;
+      --white: #fff;
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; }
+    a { color: inherit; text-underline-offset: .23em; }
+    button { font: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid #3166e5; outline-offset: 4px; }
+    .shell { max-width: 1440px; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 3.75rem); }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      min-height: 4.5rem;
+    }
+    .brand {
+      display: inline-flex; gap: .68rem; align-items: center; width: fit-content;
+      font-weight: 800; letter-spacing: .05em; text-decoration: none;
+    }
+    .brand-mark {
+      display: grid; place-items: center; width: 1.85rem; height: 1.95rem;
+      border-radius: .21rem .44rem .44rem .21rem; border-left: .3rem solid #f9d560;
+      color: var(--white); background: var(--blue); box-shadow: 0 2px 0 #162954;
+    }
+    .brand-mark::before {
+      content: ""; width: .65rem; height: .46rem; border-block: 1px solid currentColor;
+    }
+    .tools { display: flex; align-items: center; gap: clamp(.8rem, 3vw, 2rem); font-size: .94rem; }
+    .wiki-link { color: var(--blue); font-weight: 750; white-space: nowrap; }
+    .contents { position: relative; z-index: 2; }
+    .contents summary {
+      cursor: pointer; font-weight: 750; list-style: none; white-space: nowrap;
+    }
+    .contents summary::-webkit-details-marker { display: none; }
+    .contents summary::after {
+      content: ""; display: inline-block; width: .38rem; height: .38rem; margin-left: .5rem;
+      border-right: 1.5px solid; border-bottom: 1.5px solid; transform: translateY(-.15rem) rotate(45deg);
+    }
+    .contents[open] summary::after { transform: translateY(.05rem) rotate(225deg); }
+    .contents nav {
+      position: absolute; inset: 2rem 0 auto auto; width: min(23.5rem, 82vw);
+      max-height: min(65vh, 28rem); overflow-y: auto;
+      background: var(--white); border: 1px solid var(--line); padding: .5rem;
+      border-radius: .55rem; box-shadow: 0 .85rem 2rem #12234f20;
+    }
+    .contents ol { list-style: none; padding: 0; margin: 0; }
+    .contents a {
+      display: grid; grid-template-columns: 2rem 1fr; align-items: start; gap: .4rem;
+      text-decoration: none; line-height: 1.5; padding: .58rem .65rem; border-radius: .25rem;
+    }
+    .contents a:hover, .contents a[aria-current="page"] { background: var(--paper); color: var(--blue); }
+    .contents a[aria-current="page"] { font-weight: 800; }
+    .contents a span:first-child { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .stage {
+      --pad: clamp(1.2rem, 4.35vw, 4rem);
+      display: flex; flex-direction: column; min-height: clamp(35rem, 73vh, 53rem);
+      padding: var(--pad); position: relative; overflow: hidden; isolation: isolate;
+      border-radius: .8rem 1.45rem 1.45rem .8rem;
+      border: 1px solid #b9c7e8; border-left: .45rem solid var(--blue);
+      background: var(--white); box-shadow: 0 7px 0 #d5dff5, 0 9px 0 #adbee7;
+    }
+    .slide-grid { display: flex; flex-direction: column; flex: 1; align-items: stretch; }
+    .slide-copy { min-width: 0; }
+    .stage h1 {
+      max-width: 24ch; font-size: clamp(2.1rem, 4.25vw, 4.05rem); margin: 0;
+      font-weight: 850; letter-spacing: -.03em; line-height: 1.21; text-wrap: balance;
+    }
+    .stage h1:focus { outline: none; }
+    .lead {
+      font-size: clamp(1.06rem, 1.86vw, 1.41rem); line-height: 1.65;
+      color: var(--muted); max-width: 43ch; margin: 1rem 0 0; text-wrap: pretty;
+    }
+    .blocks { display: grid; gap: .9rem 2.1rem; margin-top: clamp(1.5rem, 3vw, 2.8rem); }
+    .block { min-width: 0; }
+    .block h2 {
+      font-size: clamp(1.15rem, 2vw, 1.47rem); line-height: 1.35;
+      color: var(--blue); margin: 0 0 .44rem; font-weight: 830;
+    }
+    .block p, .note { margin: 0; font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.65; }
+    .note { border-left: 3px solid var(--blue); padding: .55rem .8rem; margin-top: 1.5rem; background: var(--paper); }
+    .sources {
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .7rem;
+      color: var(--muted); border-top: 1px solid var(--line); padding-top: .85rem; margin-top: 1.4rem;
+      font-size: .9rem; line-height: 1.55;
+    }
+    .sources strong { margin-inline-end: .12rem; }
+    .sources a {
+      padding: .17rem .42rem; background: var(--paper); color: var(--blue);
+      border-radius: .25rem; text-decoration: none; overflow-wrap: anywhere;
+    }
+    .sources a:hover { text-decoration: underline; }
+    .stage-cover, .stage-recap { background: var(--deep); border-color: var(--deep); border-left-color: var(--yellow); color: var(--white); }
+    .stage-cover .lead, .stage-recap .lead { color: #e1e9ff; }
+    .stage-cover .block h2, .stage-recap .block h2 { color: var(--yellow); }
+    .stage-cover .note, .stage-recap .note { border-color: var(--yellow); background: #233765; }
+    .stage-cover .sources, .stage-recap .sources { border-color: #6075a5; color: #e1e9ff; }
+    .stage-cover .sources a, .stage-recap .sources a { background: #263a6b; color: #f0f4ff; }
+    .stage-cover a:focus-visible, .stage-recap a:focus-visible { outline-color: var(--yellow); }
+    .stage-cover .slide-grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: clamp(1rem, 4vw, 4rem); }
+    .stage-cover h1 { font-size: clamp(2.55rem, 5.55vw, 5.3rem); white-space: pre-line; }
+    .stage-cover .blocks { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: .8rem 1.45rem; }
+    .hero-visual {
+      display: flex; flex-direction: column; justify-content: center; gap: .85rem;
+      position: relative; padding: 2rem 12%; min-height: 23rem; border-radius: .65rem;
+      border: 1px solid #536a9a; overflow: hidden;
+      background-color: #1c3263;
+      background-image: linear-gradient(90deg, #8aa7e22c 1px, transparent 1px), linear-gradient(#8aa7e22c 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .hero-visual::before {
+      position: absolute; inset: -55% -47% auto auto; width: 85%; aspect-ratio: 1;
+      border: 1px solid #a9bbed; border-radius: 50%; content: "";
+      box-shadow: 0 0 0 1.2rem #1c3263, 0 0 0 calc(1.2rem + 1px) #758bc3, 0 0 0 2.6rem #1c3263, 0 0 0 calc(2.6rem + 1px) #536a9a;
+    }
+    .visual-card {
+      display: grid; grid-template-columns: auto 1fr; align-items: center; gap: .85rem;
+      background: #e7efff; color: var(--deep); padding: .65rem .8rem;
+      border-radius: .32rem; width: 86%; min-width: 9.5rem; position: relative;
+      box-shadow: 0 .4rem 0 #0c183ca6; font-weight: 850; font-size: clamp(1.12rem, 2.4vw, 1.8rem);
+    }
+    .visual-card:nth-child(1) { transform: rotate(-6deg); }
+    .visual-card:nth-child(2) { transform: rotate(4deg); background: var(--yellow); align-self: center; }
+    .visual-card:nth-child(3) { transform: rotate(-3.5deg); align-self: end; }
+    .visual-card span {
+      display: grid; width: 1.7rem; aspect-ratio: 1; place-items: center; border: 1px solid;
+      border-radius: 50%; font-size: .85rem; font-variant-numeric: tabular-nums;
+    }
+    .stage-compare .blocks { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1rem; }
+    .stage-compare .block { padding: clamp(1.15rem, 3vw, 2rem); background: var(--paper); border-top: .32rem solid var(--blue); }
+    .stage-compare .block:nth-child(even) { background: #fff7d8; border-color: #be8d0c; }
+    .stage-compare .block h2 { font-size: clamp(1.45rem, 2.5vw, 2.15rem); }
+    .stage-concept .block {
+      display: grid; grid-template-columns: minmax(7rem, .28fr) 1fr; column-gap: 1.1rem;
+      border-top: 1px solid var(--line); padding-block: .9rem;
+    }
+    .stage-concept .blocks { gap: 0; max-width: 61rem; }
+    .stage-concept .block h2 { margin: 0; }
+    .stage-demo .slide-grid, .stage-quiz .slide-grid {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .85fr);
+      align-items: start; gap: clamp(1.25rem, 4vw, 3rem);
+    }
+    .stage-demo .block, .stage-quiz .block { border-left: .24rem solid var(--yellow); padding-left: .8rem; }
+    .stage-demo .slide-grid.single, .stage-quiz .slide-grid.single { display: flex; flex-direction: column; }
+    .quiz-form {
+      border: 1px solid var(--line); border-radius: .7rem; min-width: 0; padding: 1.2rem;
+      background: var(--paper); margin: 0;
+    }
+    .quiz-form fieldset { border: 0; padding: 0; min-width: 0; margin: 0; }
+    .quiz-form legend {
+      color: var(--ink); font-weight: 850; font-size: clamp(1.17rem, 2vw, 1.42rem);
+      line-height: 1.45; margin-bottom: .75rem; padding: 0;
+    }
+    .options { display: grid; gap: .55rem; }
+    .option {
+      display: flex; align-items: baseline; gap: .55rem; border: 1px solid #b8c7e9;
+      border-radius: .38rem; background: var(--white); padding: .62rem .7rem; line-height: 1.5; cursor: pointer;
+    }
+    .option:has(:checked) { border-color: var(--blue); background: #e6edff; }
+    .option:has(:focus-visible) { outline: 2px solid #3166e5; outline-offset: 2px; }
+    .option input { accent-color: var(--blue); margin: 0; flex-shrink: 0; }
+    .check {
+      border: 0; background: var(--blue); color: var(--white); border-radius: .36rem;
+      padding: .62rem .9rem; margin-top: .83rem; font-weight: 800;
+    }
+    .check:hover { background: var(--deep); }
+    .feedback { margin: .8rem 0 0; padding-left: .65rem; border-left: 3px solid var(--blue); font-weight: 700; line-height: 1.5; }
+    .feedback:empty { display: none; }
+    .timeline {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+      gap: .85rem; margin: 1.5rem 0 0; padding: 0; list-style: none;
+    }
+    .timeline li { min-width: 0; border-top: 3px solid var(--blue); background: var(--paper); padding: .8rem; }
+    .timeline .day { display: inline-block; color: var(--deep); background: var(--yellow); padding: .15rem .44rem; border-radius: .2rem; font-weight: 800; }
+    .timeline h2 { font-size: 1.14rem; margin: .65rem 0 .35rem; line-height: 1.4; }
+    .timeline p { line-height: 1.56; margin: 0; }
+    .stage-timeline .blocks { grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+    .stage-recap .blocks {
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+      counter-reset: recap;
+    }
+    .stage-recap .block { border-top: 1px solid #677dad; padding-top: 1rem; counter-increment: recap; }
+    .stage-recap .block::before {
+      display: grid; place-items: center; content: counter(recap); margin-bottom: .7rem;
+      width: 1.9rem; aspect-ratio: 1; color: var(--deep); font-weight: 850;
+      border-radius: 50%; background: var(--yellow);
+    }
+    .controls {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: .9rem; align-items: center;
+      padding-block: 1.4rem 1rem;
+    }
+    .controls button {
+      width: fit-content; min-height: 2.7rem; font-weight: 800; padding: .45rem .88rem;
+      border: 1px solid var(--line); border-radius: .35rem; background: var(--white); color: var(--blue);
+    }
+    .controls button:enabled:hover { border-color: var(--blue); }
+    .controls button:last-child { justify-self: end; border-color: var(--blue); background: var(--blue); color: var(--white); }
+    .controls button:last-child:enabled:hover { background: var(--deep); }
+    .controls button:disabled { opacity: .45; cursor: default; }
+    .progress { display: grid; grid-template-columns: auto 5.5rem; align-items: center; gap: .48rem; color: var(--muted); }
+    .progress output { font-size: .9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .progress progress { width: 100%; height: .32rem; appearance: none; border: none; background: #dae3f6; border-radius: 2rem; overflow: hidden; }
+    .progress progress::-webkit-progress-bar { background: #dae3f6; }
+    .progress progress::-webkit-progress-value { background: var(--blue); }
+    .progress progress::-moz-progress-bar { background: var(--blue); }
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+      clip-path: inset(50%); white-space: nowrap; border: 0;
+    }
+    @media (max-width: 800px) {
+      .stage { min-height: 32rem; }
+      .stage-cover .slide-grid { grid-template-columns: 1fr; }
+      .hero-visual { min-height: 13.5rem; padding: 1.15rem 8%; }
+      .visual-card { width: min(75%, 17rem); }
+      .stage-demo .slide-grid, .stage-quiz .slide-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 470px) {
+      .topbar { min-height: 3.9rem; gap: .5rem; }
+      .tools { gap: .7rem; }
+      .brand { letter-spacing: 0; gap: .4rem; }
+      .brand-mark { width: 1.3rem; height: 1.6rem; }
+      .stage { --pad: 1.08rem; min-height: 0; border-radius: .5rem .85rem .85rem .5rem; }
+      .stage h1 { font-size: clamp(1.9rem, 9vw, 2.5rem); }
+      .stage-concept .block { display: block; }
+      .stage-concept .block h2 { margin-bottom: .35rem; }
+      .progress { grid-template-columns: auto; gap: .27rem; text-align: center; }
+      .quiz-form { padding: .85rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" id="cover-link" href="#"><span class="brand-mark" aria-hidden="true"></span>記憶練習簿</a>
+      <div class="tools">
+        <a class="wiki-link" href="wiki.html">LLM Wiki</a>
+        <details class="contents" id="contents">
+          <summary>目錄</summary>
+          <nav aria-label="簡報目錄"><ol id="slide-list"></ol></nav>
+        </details>
+      </div>
+    </header>
+    <main aria-label="教學簡報">
+      <article class="stage" id="stage"></article>
+      <nav class="controls" aria-label="投影片控制">
+        <button type="button" id="prev" aria-keyshortcuts="ArrowLeft">上一張</button>
+        <div class="progress">
+          <output id="counter" aria-hidden="true"></output>
+          <progress id="progress" aria-label="簡報進度"></progress>
+        </div>
+        <button type="button" id="next" aria-keyshortcuts="ArrowRight">下一張</button>
+      </nav>
+      <noscript><p>請啟用 JavaScript 以瀏覽簡報，或前往 <a href="wiki.html">LLM Wiki</a> 閱讀重點。</p></noscript>
+    </main>
+  </div>
+  <script type="application/json" id="deck-data">{"title": "記憶練習簿", "subtitle": "間隔學習與提取練習", "slides": [{"id": "start", "type": "cover", "title": "讀過的東西，\n怎麼留到下週？", "lead": "把複習拆成兩個決定，練習一次，再排出自己的一週計畫。", "blocks": [{"label": "何時複習", "text": "間隔學習是把同一份材料分到幾個時段練習。"}, {"label": "怎麼複習", "text": "提取練習是先把答案遮起來，試著從記憶說出或寫出重點。"}], "refs": [{"id": "C01", "label": "複習時間怎麼排", "href": "wiki.html#C01"}, {"id": "C03", "label": "先從記憶找答案", "href": "wiki.html#C03"}]}, {"id": "two-choices", "type": "compare", "title": "先分清楚兩個決定", "lead": "假設你下週要考英文單字，先決定哪幾天複習，再決定每次要做什麼。", "blocks": [{"label": "何時｜間隔學習", "text": "間隔學習是把同一份材料分到幾個時段練習。"}, {"label": "怎麼｜提取練習", "text": "提取練習是先把答案遮起來，試著從記憶說出或寫出重點。"}], "note": "同一天也能做提取練習。把同一組提取題分開練，兩種方法就能一起用。", "refs": [{"id": "C01", "label": "複習時間怎麼排", "href": "wiki.html#C01"}, {"id": "C03", "label": "先從記憶找答案", "href": "wiki.html#C03"}]}, {"id": "test-delay", "type": "concept", "title": "測驗時間一變，結果也會變", "lead": "想知道下週還記得多少，就要看延後測驗的結果。", "blocks": [{"label": "一項短文實驗", "text": "在一項短文實驗中，5 分鐘後重讀組表現較好；兩天和一週後，先回想的組別表現較好。"}, {"label": "一項事實材料研究", "text": "在事實材料研究中，希望記得越久時，表現較佳的複習間隔通常也較長。"}], "note": "這兩個實驗提醒我們先想清楚，複習是為了幾分鐘後的小考，還是一週後也能想起來。", "refs": [{"id": "C04", "label": "短文實驗的延後測驗", "href": "wiki.html#C04"}, {"id": "C02", "label": "間隔會隨保留目標改變", "href": "wiki.html#C02"}]}, {"id": "try-it", "type": "demo", "title": "做一次提取，再看答案", "lead": "用自己的話先說一遍，再選一個答案核對。", "blocks": [{"label": "先回想", "text": "提取練習是先把答案遮起來，試著從記憶說出或寫出重點。"}, {"label": "再核對", "text": "在一項選擇題研究中，提供正解回饋增加了延後測驗的正答，也減少重複出現先前的誘答。"}], "quiz": {"question": "「把同一組單字安排在不同天複習」，先做的是哪個決定？", "options": ["決定何時複習", "決定怎麼複習"], "answer": 0, "explanations": ["把複習排到不同天，是在安排間隔。", "這句只交代複習日期。若加上『遮住答案自己回想』，就也決定了怎麼複習。"]}, "refs": [{"id": "C01", "label": "複習時間怎麼排", "href": "wiki.html#C01"}, {"id": "C03", "label": "先從記憶找答案", "href": "wiki.html#C03"}, {"id": "C06", "label": "核對答案的作用", "href": "wiki.html#C06"}]}, {"id": "one-week", "type": "timeline", "title": "把同一組題目分開練", "lead": "假設你想在一週後記得一組英文單字，可以這樣安排。", "blocks": [], "timeline": [{"day": "第 1 天", "title": "做一組題卡", "description": "先學單字，再遮住譯詞試答，最後核對。"}, {"day": "第 3 天", "title": "回想再核對", "description": "重做同一組題。記下卡住的題，也留幾題答對的。"}, {"day": "第 6 天", "title": "混在一起抽查", "description": "打亂題序再答，把漏掉的重點排進下一輪。"}], "note": "教學示例。依目標日期和作答情況調整間隔。", "refs": [{"id": "C08", "label": "規劃一週示例", "href": "wiki.html#C08"}, {"id": "C07", "label": "分開做幾次提取", "href": "wiki.html#C07"}]}, {"id": "quick-check", "type": "quiz", "title": "檢查自己會不會用", "lead": "你今天已經把一張單字卡下週還要記得，下一步怎麼做？", "blocks": [], "quiz": {"question": "選一個最符合這堂課的做法。", "options": ["立刻移掉這張卡，以後都不練", "安排稍後再抽考這張卡，答完後核對", "每天看卡背答案，省略回想"], "answer": 1, "explanations": ["再練一次可以檢查隔了一段時間後還記不記得。", "這同時用到間隔與提取，核對可以定位下一輪要補的內容。", "看答案能用來核對。先遮住答案，才有機會練習從記憶提取。"]}, "refs": [{"id": "C05", "label": "答對後隔次再抽查", "href": "wiki.html#C05"}, {"id": "C06", "label": "核對答案的作用", "href": "wiki.html#C06"}, {"id": "C07", "label": "分開做幾次提取", "href": "wiki.html#C07"}]}, {"id": "takeaway", "type": "recap", "title": "現在就排下一次複習", "lead": "選一小段教材，寫三道能靠記憶回答的題目，再把下一次自測放進行事曆。", "blocks": [{"label": "排時間", "text": "寫下希望記到哪一天，挑一個有空回想的時段。"}, {"label": "先回想", "text": "提取練習是先把答案遮起來，試著從記憶說出或寫出重點。"}, {"label": "核對並再練", "text": "把漏答的重點補回題卡，下一次也抽查幾題已答對的題目。"}], "refs": [{"id": "C02", "label": "間隔會隨保留目標改變", "href": "wiki.html#C02"}, {"id": "C05", "label": "答對後隔次再抽查", "href": "wiki.html#C05"}, {"id": "C06", "label": "核對答案的作用", "href": "wiki.html#C06"}, {"id": "C03", "label": "先從記憶找答案", "href": "wiki.html#C03"}]}]}</script>
+  <script>
+    (() => {
+      "use strict";
+
+      const deck = JSON.parse(document.getElementById("deck-data").textContent);
+      const stage = document.getElementById("stage");
+      const list = document.getElementById("slide-list");
+      const contents = document.getElementById("contents");
+      const coverLink = document.getElementById("cover-link");
+      const previous = document.getElementById("prev");
+      const next = document.getElementById("next");
+      const counter = document.getElementById("counter");
+      const progress = document.getElementById("progress");
+      const slides = deck.slides;
+      let current = -1;
+      document.title = deck.title;
+      coverLink.href = "#" + slides[0].id;
+      progress.max = slides.length;
+
+      function element(name, className, text) {
+        const node = document.createElement(name);
+        if (className) node.className = className;
+        if (text) node.textContent = text;
+        return node;
+      }
+
+      function visual() {
+        const figure = element("div", "hero-visual");
+        figure.setAttribute("aria-hidden", "true");
+        ["先讀", "試著想", "查答案"].forEach((label, index) => {
+          const card = element("div", "visual-card");
+          card.append(element("span", "", String(index + 1)), element("strong", "", label));
+          figure.append(card);
+        });
+        return figure;
+      }
+
+      function blocks(items) {
+        const grid = element("div", "blocks");
+        for (const item of items) {
+          const block = element("section", "block");
+          block.append(element("h2", "", item.label), element("p", "", item.text));
+          grid.append(block);
+        }
+        return grid;
+      }
+
+      function timeline(items) {
+        const sequence = element("ol", "timeline");
+        sequence.setAttribute("aria-label", "練習安排");
+        for (const item of items) {
+          const slot = element("li");
+          slot.append(element("span", "day", item.day), element("h2", "", item.title), element("p", "", item.description));
+          sequence.append(slot);
+        }
+        return sequence;
+      }
+
+      function quiz(item) {
+        const form = element("form", "quiz-form");
+        const field = element("fieldset");
+        const options = element("div", "options");
+        const feedback = element("p", "feedback");
+        feedback.setAttribute("role", "status");
+        const check = element("button", "check", "核對答案");
+        check.type = "submit";
+        item.options.forEach((value, index) => {
+          const option = element("label", "option");
+          const input = element("input");
+          input.name = "answer";
+          input.type = "radio";
+          input.value = index;
+          input.required = true;
+          option.append(input, element("span", "", value));
+          options.append(option);
+          input.addEventListener("change", () => { feedback.textContent = ""; });
+        });
+        field.append(element("legend", "", item.question), options);
+        form.append(field, check, feedback);
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const chosen = Number(new FormData(form).get("answer"));
+          const prefix = chosen === item.answer ? "答對了。" : "再試一次。";
+          feedback.textContent = prefix + " " + item.explanations[chosen];
+        });
+        return form;
+      }
+
+      function references(items) {
+        const bar = element("aside", "sources");
+        bar.setAttribute("aria-label", "對應的 Wiki 條目");
+        bar.append(element("strong", "", "Wiki 依據"));
+        for (const item of items) {
+          const link = element("a", "", [item.id, item.label].filter(Boolean).join(" "));
+          link.href = item.href;
+          bar.append(link);
+        }
+        return bar;
+      }
+
+      const menuLinks = slides.map((slide, index) => {
+        const item = element("li");
+        const link = element("a");
+        link.href = "#" + slide.id;
+        link.append(element("span", "", String(index + 1).padStart(2, "0")), element("span", "", slide.title));
+        link.addEventListener("click", (event) => {
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          contents.open = false;
+          go(index);
+        });
+        item.append(link);
+        list.append(item);
+        return link;
+      });
+
+      function render(index, moveFocus = false) {
+        const slide = slides[index];
+        current = index;
+        const grid = element("div", "slide-grid" + (slide.quiz ? "" : " single"));
+        const copy = element("div", "slide-copy");
+        const heading = element("h1", "", slide.title);
+        heading.id = "slide-heading";
+        heading.tabIndex = -1;
+        copy.append(heading);
+        const lead = slide.lead || (slide.type === "cover" ? deck.subtitle : "");
+        if (lead) copy.append(element("p", "lead", lead));
+        if (slide.timeline?.length) copy.append(timeline(slide.timeline));
+        if (slide.blocks?.length) copy.append(blocks(slide.blocks));
+        if (slide.note) copy.append(element("p", "note", slide.note));
+        grid.append(copy);
+        if (slide.type === "cover") grid.append(visual());
+        if (slide.quiz) grid.append(quiz(slide.quiz));
+        stage.className = "stage stage-" + slide.type;
+        stage.setAttribute("aria-labelledby", heading.id);
+        stage.replaceChildren(grid);
+        if (slide.refs?.length) stage.append(references(slide.refs));
+        menuLinks.forEach((link, position) => {
+          if (position === index) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
+        previous.disabled = index === 0;
+        next.disabled = index === slides.length - 1;
+        counter.value = (index + 1) + " / " + slides.length;
+        progress.value = index + 1;
+        progress.setAttribute("aria-valuetext", "第 " + (index + 1) + " 張，共 " + slides.length + " 張");
+        if (moveFocus) {
+          heading.focus({ preventScroll: true });
+          window.scrollTo(0, 0);
+        }
+      }
+
+      function indexFromLocation() {
+        const index = slides.findIndex((slide) => "#" + slide.id === location.hash);
+        return Math.max(0, index);
+      }
+
+      function go(index) {
+        if (index < 0 || index >= slides.length) return;
+        if (location.hash !== "#" + slides[index].id) {
+          history.pushState(null, "", "#" + slides[index].id);
+        }
+        render(index, true);
+      }
+
+      coverLink.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        go(0);
+      });
+      previous.addEventListener("click", () => go(current - 1));
+      next.addEventListener("click", () => go(current + 1));
+      window.addEventListener("hashchange", () => {
+        const index = indexFromLocation();
+        if (current !== index) render(index, true);
+      });
+      document.addEventListener("click", (event) => {
+        if (contents.open && !contents.contains(event.target)) contents.open = false;
+      });
+      document.addEventListener("keydown", (event) => {
+        if (contents.open && event.key === "Escape") {
+          contents.open = false;
+          contents.querySelector("summary").focus();
+          return;
+        }
+        if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
+            contents.open || event.target.closest("input, textarea, select, [contenteditable]")) return;
+        const destinations = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: 0, End: slides.length - 1 };
+        if (!Object.hasOwn(destinations, event.key)) return;
+        event.preventDefault();
+        go(destinations[event.key]);
+      });
+      render(indexFromLocation());
+    })();
+  </script>
+</body>
+</html>

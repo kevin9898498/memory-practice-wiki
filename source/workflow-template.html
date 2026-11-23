@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111d42">
+  <title>製作紀錄｜間隔學習與提取練習</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #111d42;
+      --blue: #2249ce;
+      --yellow: #f9df73;
+      --paper: #faf9f3;
+      --rule: #d3d9e7;
+      --muted: #4c576d;
+      --sans: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-padding-top: 1.25rem; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.7 var(--sans); }
+    h1, h2, h3, h4, p, ol, ul, dl, dd, figure { margin: 0; }
+    h1, h2, h3, h4 { line-height: 1.28; }
+    p { max-width: 65ch; }
+    a { color: var(--blue); text-underline-offset: .2em; }
+    a:focus-visible { outline: 3px solid currentColor; outline-offset: .25rem; }
+    [hidden] { display: none !important; }
+    .wrap { width: min(69rem, calc(100% - 3rem)); margin-inline: auto; }
+    .skip { position: absolute; z-index: 1; background: var(--yellow); padding: .65rem 1rem; top: .5rem; left: .5rem; transform: translateY(-170%); }
+    .skip:focus { transform: none; }
+    .masthead { background: var(--ink); color: #fff; }
+    .masthead .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4rem; }
+    .brand { color: #fff; font-weight: 800; text-decoration: none; }
+    .masthead nav { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1.35rem; }
+    .masthead nav a { color: #e4eafe; font-size: .9rem; text-decoration: none; }
+    .masthead nav a:hover { text-decoration: underline; }
+    .masthead nav a[aria-current] { color: var(--yellow); text-decoration: underline; }
+    .hero { background: var(--blue); color: #fff; }
+    .hero .wrap { padding-block: clamp(2.35rem, 7vw, 5.15rem) clamp(2rem, 5vw, 3.6rem); }
+    .hero h1 { font-size: clamp(2.3rem, 6vw, 5.25rem); letter-spacing: -.06em; font-weight: 900; }
+    .hero p { max-width: 37rem; font-size: clamp(1rem, 2.2vw, 1.25rem); color: #f1f4ff; margin-top: .85rem; }
+    .hero strong { color: var(--yellow); }
+    .stats { background: var(--yellow); border-bottom: 1px solid var(--ink); }
+    .stats dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stats dl > div { padding: .85rem 1.2rem; min-width: 0; border-left: 1px solid #968349; display: flex; align-items: baseline; gap: .55rem; }
+    .stats dl > div:first-child { border-left: 0; padding-left: 0; }
+    .stats dt { order: 2; font-size: .85rem; line-height: 1.35; }
+    .stats dd { font-weight: 900; font-size: 1.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
+    .toc { display: flex; flex-wrap: wrap; gap: .3rem 1.55rem; padding-block: 1rem; border-bottom: 1px solid var(--rule); }
+    .toc a { font-size: .9rem; font-weight: 750; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .report-section { padding-block: clamp(2rem, 5vw, 3.55rem); border-bottom: 1px solid var(--rule); }
+    .report-section h2 { font-size: clamp(1.6rem, 3.9vw, 2.45rem); letter-spacing: -.035em; margin-bottom: .8rem; }
+    .report-section > p { color: var(--muted); margin-bottom: 1.3rem; }
+    .scope { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.7rem; }
+    .scope > div, .reflection > div { padding-block: .8rem; border-top: 1px solid var(--rule); }
+    .scope dt, .reflection dt { font-weight: 850; margin-bottom: .2rem; }
+    .scope dd, .reflection dd { color: var(--muted); overflow-wrap: anywhere; }
+    .graph { border: 1px solid var(--ink); background: #fff; }
+    .flow { padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); counter-reset: phase; }
+    .flow > li { min-width: 0; counter-increment: phase; }
+    .flow > li + li { border-left: 1px solid var(--rule); }
+    .flow h3 { padding: .75rem .95rem; background: var(--ink); color: white; font-size: 1rem; display: flex; align-items: center; gap: .6rem; }
+    .flow h3::before { content: counter(phase); background: var(--yellow); color: var(--ink); border-radius: 50%; font-weight: 900; font-variant-numeric: tabular-nums; width: 1.55rem; height: 1.55rem; display: grid; place-items: center; }
+    .nodes { padding: .3rem .95rem .75rem; list-style: none; }
+    .nodes > li { padding: .7rem 0 .7rem 1.15rem; line-height: 1.42; position: relative; }
+    .nodes > li:not(:last-child) { border-bottom: 1px solid var(--rule); }
+    .nodes > li::before { content: "↓"; position: absolute; left: 0; color: var(--blue); }
+    .nodes strong { display: block; font-size: .95rem; }
+    .nodes small { color: var(--muted); font-size: .835rem; }
+    .retry { margin: 0; padding: .85rem .95rem .85rem 2.2rem; display: grid; gap: .35rem; border-top: 1px solid var(--ink); background: #f4f6ff; font-size: .9rem; }
+    .retry li::marker { color: var(--blue); }
+    figcaption { padding: .65rem .95rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .88rem; }
+    .runs { display: grid; gap: .8rem; }
+    .run { padding: .8rem 1rem .95rem; border: 1px solid var(--rule); border-left: 4px solid var(--blue); background: #fff; }
+    .run[data-issue] { border-left-color: #ac5d14; }
+    .run-head { display: flex; justify-content: space-between; align-items: start; gap: .75rem; }
+    .run h3 { font-size: 1.04rem; }
+    .run-phase, .run-detail { color: var(--muted); margin-top: .25rem; }
+    .run-phase { font-size: .86rem; }
+    .status { flex-shrink: 0; padding: .08rem .55rem; background: #e8edff; color: #1c3588; font-size: .83rem; font-weight: 750; }
+    .run[data-issue] .status { background: #fceacb; color: #63380c; }
+    .run ul { padding-left: 1.25rem; margin-top: .3rem; }
+    .checks { padding: .8rem 1rem; margin-top: 1rem; border-left: 4px solid var(--blue); background: #ebefff; color: var(--ink); }
+    .reflection { max-width: 49rem; }
+    .mapping { border-collapse: collapse; width: 100%; text-align: left; table-layout: fixed; }
+    .mapping th, .mapping td { border-bottom: 1px solid var(--rule); padding: .64rem .45rem .64rem 0; vertical-align: top; overflow-wrap: anywhere; }
+    .mapping thead th { border-bottom-color: var(--ink); font-size: .85rem; }
+    .mapping thead th:first-child { width: 37%; }
+    .mapping th[scope=row] { text-align: left; }
+    .mapping ul { display: flex; flex-wrap: wrap; gap: .35rem .5rem; margin: 0; padding: 0; list-style: none; }
+    .mapping li { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem; padding: .08rem .4rem; background: #edf0f9; font-size: .83rem; }
+    .mapping li span { color: var(--muted); }
+    .submission { margin-block: 1.8rem; padding: 1rem 1.1rem; border: 1px solid var(--rule); }
+    .submission h2 { font-size: 1rem; margin-bottom: .4rem; }
+    .submission p { color: var(--muted); overflow-wrap: anywhere; }
+    footer .wrap { border-top: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; padding: .9rem 0 1.35rem; font-size: .9rem; }
+    @media (max-width: 43rem) {
+      .wrap { width: calc(100% - 2rem); }
+      .masthead .wrap { flex-wrap: wrap; padding-block: .65rem; gap: .2rem .8rem; }
+      .masthead nav { gap: .2rem .8rem; }
+      .stats dl > div { padding: .7rem .45rem; display: block; }
+      .stats dt { margin-bottom: .35rem; font-size: .75rem; }
+      .stats dd { font-size: 1.3rem; }
+      .flow { grid-template-columns: 1fr; }
+      .flow > li + li { border: 0; }
+      .scope { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body, .masthead, .hero, .flow h3, .stats { background: white; color: #111; }
+      .hero p, .hero strong, .checks { color: #111; }
+      .masthead, .toc, footer, .skip { display: none; }
+      .wrap { width: 100%; }
+      .hero .wrap, .report-section { padding-block: 1rem; }
+      .hero h1 { font-size: 2rem; }
+      .flow h3 { border-bottom: 1px solid #bbb; }
+      .run, .graph, .submission, tr { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到製作紀錄</a>
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html">間隔學習與提取練習</a>
+      <nav aria-label="作品導覽">
+        <a href="index.html">教學簡報</a>
+        <a href="wiki.html">LLM Wiki</a>
+        <a href="workflow.html" aria-current="page">製作紀錄</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="hero">
+      <div class="wrap">
+        <h1>從 Wiki 到簡報</h1>
+        <p>追蹤一條教學主張，從原始研究、Wiki 概念頁、簡報草稿到瀏覽器驗收。<strong>有疑問的主張在進入 HTML 前退回查證。</strong></p>
+      </div>
+    </div>
+    <div id="stats" class="stats" hidden>
+      <dl class="wrap">
+        <div><dt>原始研究</dt><dd data-stat="sources"></dd></div>
+        <div><dt>Wiki 概念頁</dt><dd data-stat="topics"></dd></div>
+        <div><dt>知識主張</dt><dd data-stat="claims"></dd></div>
+        <div><dt>簡報頁</dt><dd data-stat="slides"></dd></div>
+      </dl>
+    </div>
+    <div class="wrap">
+      <nav class="toc" aria-label="本頁目錄">
+        <a href="#scope">生成前討論</a>
+        <a href="#graph">流程與迴圈</a>
+        <a href="#runs">執行紀錄</a>
+        <a href="#reflection">反思</a>
+        <a href="#mapping">簡報與 Wiki 對照</a>
+      </nav>
+      <noscript><p class="checks">啟用 JavaScript 即可讀取此檔內的討論、執行紀錄與對照表。</p></noscript>
+      <section id="scope" class="report-section" aria-labelledby="scope-title">
+        <h2 id="scope-title">生成前討論</h2>
+        <p>先界定受眾、教學目標和 Wiki 要回答的問題，再開始選文與整理。</p>
+        <dl id="scope-items" class="scope"></dl>
+      </section>
+      <section id="graph" class="report-section" aria-labelledby="graph-title">
+        <h2 id="graph-title">流程與迴圈</h2>
+        <p>公開版將採錄的原文摘句與書目保留在 <a href="raw/README.md"><code>raw/</code></a>，在 <a href="wiki/index.md"><code>wiki/</code></a> 整理概念、限制和引用。根目錄的 <a href="AGENTS.md"><code>AGENTS.md</code></a> 規定新增頁面的格式、命名與位置。</p>
+        <figure class="graph">
+          <ol class="flow">
+            <li>
+              <h3>建立知識庫</h3>
+              <ol class="nodes">
+                <li><strong>討論範圍</strong><small>決定受眾、學習目標、查詢問題。</small></li>
+                <li><strong>取得與檢視資料</strong><small>依問題找研究，將原文摘句與出處保存於 raw/。</small></li>
+                <li><strong>匯入 Wiki</strong><small>保留原始資料卡，依 AGENTS.md 建立或更新 wiki/ 概念頁。</small></li>
+              </ol>
+            </li>
+            <li>
+              <h3>草稿與查證</h3>
+              <ol class="nodes">
+                <li><strong>查詢 Wiki</strong><small>按教學問題找概念頁與候選主張。</small></li>
+                <li><strong>AI 撰寫教學草稿</strong><small>選取 Wiki 主張，附上主張 ID。</small></li>
+                <li><strong>核對原文及引文</strong><small>檢查研究情境、限制、數字和例子標示。</small></li>
+              </ol>
+            </li>
+            <li>
+              <h3>產出與驗收</h3>
+              <ol class="nodes">
+                <li><strong>產生 HTML</strong><small>以已核對的草稿組成簡報，保留 Wiki 連結。</small></li>
+                <li><strong>開啟瀏覽器驗收</strong><small>檢查版面、翻頁、互動與可追溯的引用。</small></li>
+              </ol>
+            </li>
+          </ol>
+          <ul class="retry" aria-label="檢查未通過時的返回路徑">
+            <li><strong>缺少資料</strong> → 回到查詢。仍缺證據就補找原文、匯入與更新 Wiki，再查一次。</li>
+            <li><strong>主張超出證據範圍</strong> → 改寫該頁草稿，再核對原文及引文。</li>
+            <li><strong>瀏覽器驗收有問題</strong> → 修正 HTML，再跑驗收。</li>
+          </ul>
+          <figcaption>逐篇重複擷取與查核，逐項教學問題查詢 Wiki。把主張查核放在輸出之前，可縮小重做範圍並保留完整的證據鏈。</figcaption>
+        </figure>
+      </section>
+      <section id="runs" class="report-section" aria-labelledby="runs-title">
+        <h2 id="runs-title">執行紀錄</h2>
+        <div id="run-items" class="runs"></div>
+        <p class="checks">程式可核對欄位、標記、引用 ID 和明確的規則。主張是否符合原文、語氣有沒有超出研究能支持的範圍，仍須由人或 AI 逐句比對。</p>
+      </section>
+      <section id="reflection" class="report-section" aria-labelledby="reflection-title">
+        <h2 id="reflection-title">反思</h2>
+        <dl id="reflection-items" class="reflection"></dl>
+      </section>
+      <section id="mapping" class="report-section" aria-labelledby="mapping-title">
+        <h2 id="mapping-title">簡報與 Wiki 對照</h2>
+        <p id="mapping-note">用主張 ID 開啟 Wiki 條目及其研究連結。</p>
+        <table class="mapping" aria-describedby="mapping-note">
+          <thead><tr><th scope="col">簡報頁</th><th scope="col">Wiki 主張與來源</th></tr></thead>
+          <tbody id="mapping-items"></tbody>
+        </table>
+      </section>
+      <aside class="submission" aria-labelledby="submission-title">
+        <h2 id="submission-title">繳交標題</h2>
+        <p>〔學校〕 〔學號〕 〔系級〕 〔姓名〕 間隔學習與提取練習</p>
+      </aside>
+    </div>
+  </main>
+  <footer><div class="wrap"><a href="index.html">開啟教學簡報</a><a href="wiki.html">瀏覽 LLM Wiki</a><a href="#main">回到頁首</a></div></footer>
+  <script type="application/json" id="report-data">{{REPORT_DATA}}</script>
+  <script>
+    const report = JSON.parse(document.getElementById('report-data').textContent);
+
+    function element(name, value, className) {
+      const node = document.createElement(name);
+      if (value != null) node.textContent = value;
+      if (className) node.className = className;
+      return node;
+    }
+
+    function addAnswers(target, items, answerField) {
+      const list = document.getElementById(target);
+      for (const item of items) {
+        const entry = element('div');
+        entry.append(element('dt', item.question), element('dd', item[answerField]));
+        list.append(entry);
+      }
+    }
+
+    addAnswers('scope-items', report.scope, 'decision');
+    addAnswers('reflection-items', report.reflection, 'answer');
+
+    for (const stat of document.querySelectorAll('[data-stat]')) {
+      stat.textContent = report.stats[stat.dataset.stat];
+    }
+    document.getElementById('stats').hidden = false;
+    if (report.stats.refs != null) {
+      document.getElementById('mapping-note').append(` 簡報共保留 ${report.stats.refs} 筆主張引用。`);
+    }
+
+    const runs = document.getElementById('run-items');
+    for (const run of report.runs) {
+      const article = element('article', null, 'run');
+      const head = element('div', null, 'run-head');
+      head.append(element('h3', run.name), element('span', run.status, 'status'));
+      article.append(head);
+      if (run.phase) article.append(element('p', run.phase, 'run-phase'));
+      if (run.detail) article.append(element('p', run.detail, 'run-detail'));
+      if (run.errors.length) {
+        const errors = element('ul');
+        for (const error of run.errors) errors.append(element('li', error));
+        article.append(errors);
+        article.dataset.issue = '';
+      }
+      runs.append(article);
+    }
+
+    const rows = document.getElementById('mapping-items');
+    for (const slide of report.mapping) {
+      const row = element('tr');
+      const heading = element('th', `${slide.slide}　${slide.title}`);
+      heading.scope = 'row';
+      const cell = element('td');
+      const claims = element('ul');
+      for (const claim of slide.claims) {
+        const item = element('li');
+        const link = element('a', claim.id);
+        link.setAttribute('href', claim.href.startsWith('#') ? `wiki.html${claim.href}` : claim.href);
+        item.append(link, element('span', claim.sources.join('、')));
+        claims.append(item);
+      }
+      cell.append(slide.claims.length ? claims : element('span', '本頁為導覽或練習指示'));
+      row.append(heading, cell);
+      rows.append(row);
+    }
+  </script>
+</body>
+</html>
